@@ -3,9 +3,12 @@
     <v-app-bar app color="primary">
       <v-toolbar-title>Products</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn text to="/">Home</v-btn>
-      <v-btn text to="/products">Products</v-btn>
-      <v-btn text to="/add-product">Add Product</v-btn>
+      <v-btn text="Home" to="/"></v-btn>
+      <v-btn text="Products" to="/products"></v-btn>
+      <v-btn text="Add Product" to="/add-product"></v-btn>
+
+      <v-spacer></v-spacer>
+      <v-btn v-if="isAuthenticated" @click="logout">Logout</v-btn>
     </v-app-bar>
     <router-view></router-view>
   </v-app>
@@ -13,6 +16,17 @@
 
 <script setup>
 
+
+import {computed} from 'vue'
+import {useStore} from 'vuex'
+
+const store = useStore();
+
+const isAuthenticated = computed(() => store.getters.isAuthenticated);
+
+const logout = () => {
+  store.dispatch('logout');
+};
 </script>
 
 <style>
