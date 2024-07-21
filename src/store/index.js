@@ -5,7 +5,7 @@ export default createStore({
     state: {
         products: [],
         user: null,
-        token: localStorage.getItem('token') || '',
+        token: localStorage.getItem('access_token') || '',
     },
     mutations: {
         setProducts(state, products) {
@@ -19,22 +19,22 @@ export default createStore({
         },
         setToken(state, token) {
             state.token = token;
-            localStorage.setItem('token', token);
+            localStorage.setItem('access_token', token);
         },
         logout(state) {
             state.user = null;
             state.token = '';
-            localStorage.removeItem('token');
+            localStorage.removeItem('access_token');
         },
     },
     actions: {
-        fetchProducts({ commit }) {
-            // Simulez un appel API
-            const products = [
-                { id: 1, name: 'Product 1', price: '$100' },
-                { id: 2, name: 'Product 2', price: '$200' },
-            ];
-            commit('setProducts', products);
+        async fetchProducts({ commit }) {
+            try {
+                const products = await axios.get('/products');
+                commit('setProducts', products.data);
+            } catch (error) {
+                console.error(error);
+            }
         },
         createProduct({ commit }, product) {
             // Simulez un appel API
@@ -43,7 +43,7 @@ export default createStore({
         async login({ commit }, credentials) {
             try {
                 const response = await axios.post('/auth/login', credentials);
-                commit('setToken', response.data.token);
+                commit('setToken', response.data.access_token);
                 commit('setUser', response.data.user);
             } catch (error) {
                 throw new Error('Invalid credentials');
