@@ -12,6 +12,12 @@ class ProductService {
         const response = await api.post(url, data)
         return response.data
     }
+
+    async getBrands() {
+        const url = '/brand'
+        const response = await api.get(url)
+        return response.data
+    }
 }
 
 export default new ProductService()
